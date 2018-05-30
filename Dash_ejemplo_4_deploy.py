@@ -19,6 +19,11 @@ import datetime
 import math
 from scipy.integrate import quad
 
+app = dash.Dash(__name__)
+server = app.server
+
+app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+
 #Version deploy################################################################
 def dN(x):
     ''' Probability density function of standard normal random variable x. '''
@@ -49,16 +54,7 @@ def BSM_call_value(St, K, t, T, r, sigma):
     return call_value
 ###############################################################################
 
-
-
-
-
 strikes = np.linspace(4000, 12000, 10) #no sé por qué no funciona el marks del slider cuando pongo 10
-
-app = dash.Dash(__name__)
-server = app.server
-
-app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
 app.layout = html.Div(children=[
 
