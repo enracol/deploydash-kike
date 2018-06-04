@@ -98,7 +98,7 @@ app.layout = html.Div(children=[
             html.Label(children='Cotizaciones'),
             html.Div(dcc.RadioItems(
                     id='dropdown-b',
-                    options=[{'label': i, 'value': i} for i in ['AMS', 'TSLA', 'SAN','AAPL','GASN']],
+                    options=[{'label': i, 'value': i} for i in ['AMS', 'TSLA', 'SAN','AAPL']],
                     value='SAN')),
             ]),
         
@@ -180,7 +180,7 @@ def update_graphhhh(hover_S,selected_vol,escalar,fecha):
                 {'x': [S_0],'y': [C_0],'type': 'bar','name': 'trace_name_0'},
                 {'x': [S_1],'y': [C_1],'type': 'bar','name': 'trace_name_1'},
             ],
-            'layout': {'title': title, 'yaxis': dict(range=[0, 2])}
+            'layout': {'title': title, 'yaxis': dict(range=[0, 3])}
             }
     )
 
