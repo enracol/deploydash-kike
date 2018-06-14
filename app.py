@@ -24,6 +24,8 @@ app = dash.Dash(__name__)
 server = app.server
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+mathjax = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML'
+app.scripts.append_script({ 'external_url' : mathjax })
 
 #Version deploy################################################################
 def dN(x):
@@ -54,8 +56,6 @@ def BSM_call_value(St, K, t, T, r, sigma):
     call_value = St * N(d1) - math.exp(-r * (T - t)) * K * N(d2)
     return call_value
 ###############################################################################
-mathjax = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML'
-app.scripts.append_script({ 'external_url' : mathjax })
 
 markdown_text = '''
 ### Black-Scholes
