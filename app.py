@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue May 29 14:56:58 2018
-
-@author: n34873
+@author: Enrique Ramos
 """
 
 import os
@@ -56,13 +54,32 @@ def BSM_call_value(St, K, t, T, r, sigma):
     call_value = St * N(d1) - math.exp(-r * (T - t)) * K * N(d2)
     return call_value
 ###############################################################################
+mathjax = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML'
+app.scripts.append_script({ 'external_url' : mathjax })
 
+markdown_text = '''
+### Black-Scholes
+El modelo de Black-Scholes o ecuación de Black-Scholes es una ecuación usada en matemática financiera para determinar el precio de determinados activos financieros. Dicha ecuación se basa ampliamente en la teoría de procesos estocásticos en particular modela variaciones de precios como un proceso de Wiener. En 1973, Robert C. Merton publicó "Theory of Rational Option Pricing", en él hacía referencia a un modelo matemático desarrollado por Fisher Black y Myron Scholes.
+A este modelo lo denominó Black-Scholes y fue empleado para estimar el valor actual de una opción europea para la compra (Call), o venta (Put), de acciones en una fecha futura. Posteriormente el modelo se amplió para opciones sobre acciones que producen dividendos, y luego se adoptó para opciones europeas, americanas, y mercado monetario. Los modelos de valoración de opciones son también aplicados actualmente a la valoración de activos intangibles, tales como patentes.
+ * Fuente: [Enlace Wikipedia](https://es.wikipedia.org/wiki/Modelo_de_Black-Scholes)
+ * En fórmulas:    
+     $$C = S\Phi(d_{+}) - \\text{K} e^{-r_{d}T}\Phi(d_{-})$$
+     $$P = -S\Phi(-d_{+}) + K e^{-r_{d}T}\Phi(-d_{-})$$
+donde
+     $$d_{\\pm} =\dfrac{ ln(S/K)+(r_{d}-r_{e} \\pm \sigma^{2}/2)T}{\sigma\sqrt{T}}$$
+'''
+markdown_text_2 = '''
+### Call con precios históricos.
+Selecciona una acción. Pudes ver el precio histórico de cotización para la acción seleccionada comparada contra la de Banco Santander.
+Poniéndote con el ratón encima de la gráfica, se actualizará el valor de la opción en la gráfica de la derecha para esa fecha
+'''
 strikes = np.linspace(4000, 12000, 10) #no sé por qué no funciona el marks del slider cuando pongo 10
 
 
 app.layout = html.Div(children=[
 
     html.Div([
+        dcc.Markdown(children=markdown_text),
         html.Div([
             html.Label('Volatilidad',style={'width':'10%'}),
             dcc.RadioItems(
@@ -85,32 +102,35 @@ app.layout = html.Div(children=[
             value=8000,
             #included = True,
             #vertical= True,
-        ),style={'width': '40%'}),
+        ),style={'width': '49%'}),
         
-        html.Div(html.Label('_')),
-                
         html.Div([
             html.Label('Fecha a maturity'),
             dcc.Input(id='input-date', value='1')
-            ]),
-        
-        html.Div([
+            ],style={'display': 'inline-block','float': 'right', 'width': '49%'}),
+            
+    ],style={'display': 'inline-block', 'width': '49%'}),
+    
+    html.Div(id='example-graph',style={'display': 'inline-block', 'float': 'right', 'width': '49%'}),
+    
+    dcc.Markdown(children=markdown_text_2),
+    html.Div([
             html.Label(children='Cotizaciones'),
             html.Div(dcc.RadioItems(
                     id='dropdown-b',
                     options=[{'label': i, 'value': i} for i in ['AMS', 'TSLA', 'SAN','AAPL']],
-                    value='SAN')),
+                    value='SAN'))
             ]),
-        
-        html.Div(id='example-graph'),
-        
-    ], style={'width': '49%', 'display': 'inline-block', 'padding': '0 20'}),   
     
+    dcc.Graph(id='example-graph-b',style={'display': 'inline-block','width': '49%'}),
+    html.Div(id='example-graph-c',style={'display': 'inline-block', 'float': 'right', 'width': '49%'}),
     
-    html.Div([
-        dcc.Graph(id='example-graph-b'),
-        html.Div(id='example-graph-c'),
-        ],style={'display': 'inline-block', 'float': 'right', 'width': '49%'}),
+    #html.Div([
+    #    dcc.Graph(id='example-graph-b'),
+    #    html.Div(id='example-graph-c'),
+    #    ],style={'display': 'inline-block', 'width': '49%'}),
+
+    
 ])
 
 @app.callback(Output('example-graph','children'),[Input( 'dropdown-a', 'value'),Input('input-escalar','value'),Input('input-date','value')])
@@ -181,8 +201,9 @@ def update_graphhhh(hover_S,selected_vol,escalar,fecha):
                 {'x': [S_1],'y': [C_1],'type': 'bar','name': 'trace_name_1'},
             ],
             'layout': {'title': title, 'yaxis': dict(range=[0, 3])}
-            }
+        }
     )
+        
 
 if __name__ == '__main__':
     app.run_server()
